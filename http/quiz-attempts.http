@@ -1,0 +1,76 @@
+# -----------------------------------------------------------------
+# Variables - The REST client will manage these automatically
+# -----------------------------------------------------------------
+
+@baseUrl = http://localhost:3000/api
+@quizId =
+@teacherToken =
+@studentToken =
+@attemptId =
+@questionId =
+@questionId2 =  
+@lectureId =
+@courseId = 
+@enrollmentId =
+# -----------------------------------------------------------------
+
+
+
+### =================================================================
+### QUIZ ATTEMPTS API ENDPOINTS (/api/quiz-attempts)
+### =================================================================
+#
+# Prerequisite: Run ALL previous files: auth, courses, enrollments, quizzes, and questions.
+# This ensures a student is logged in and enrolled, and a quiz with questions exists.
+#
+
+### 1. Submit Answers for a Quiz Attempt (as Student)
+# The student submits their selected answers for the quiz.
+# The server will grade this submission and create an attempt record.
+# @name submitAttempt
+POST {{baseUrl}}/quiz-attempts/submit
+Content-Type: application/json
+Authorization: Bearer {{studentToken}}
+
+{
+  "quizId": "{{quizId}}",
+  "answers": [
+    {
+      "questionId": "{{questionId}}",
+      "selectedOption": "Cascading Style Sheets"
+    },
+    {
+      "questionId": "{{questionId2}}",
+      "selectedOption": "True"
+    }
+  ]
+}
+
+### Save the attemptId from the response to the environment
+@attemptId = {{submitAttempt.response.body._id}}
+
+
+### 2. Get the Current User's Past Attempts for a Quiz (Student's View)
+# The student can see a list of their own past scores for this quiz.
+GET {{baseUrl}}/quiz-attempts/quiz/{{quizId}}/my-results
+Authorization: Bearer {{studentToken}}
+
+
+### 3. Get All Attempts for a Quiz (Teacher's View)
+# The teacher gets a report of all attempts by all students for this quiz,
+# including student names and scores.
+GET {{baseUrl}}/quiz-attempts/quiz/{{quizId}}/all-results
+Authorization: Bearer {{teacherToken}}
+
+
+### 4. Get Detailed Results of a Specific Attempt (Student's View)
+# The student views the details of their own submission to see which
+# specific questions they got right or wrong.
+GET {{baseUrl}}/quiz-attempts/{{attemptId}}
+Authorization: Bearer {{studentToken}}
+
+
+### 5. Get Detailed Results of a Specific Attempt (Teacher's View)
+# The teacher can also view the details of any student's attempt.
+GET {{baseUrl}}/quiz-attempts/{{attemptId}}
+Authorization: Bearer {{teacherToken}}

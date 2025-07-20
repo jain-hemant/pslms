@@ -1,0 +1,65 @@
+
+@baseUrl = http://localhost:3000/api
+@teacherToken =
+@studentToken =
+@lectureId =
+@courseId =
+@enrollmentId =
+
+
+
+### =================================================================
+### QUIZZES API ENDPOINTS (/api/quizzes)
+### =================================================================
+#
+# Prerequisite: Run auth.http and courses.http first to get the necessary tokens
+# and to create a course to associate the quiz with.
+#
+
+### 1. Create a new Quiz (as Teacher)
+# This request is sent by the teacher to create a new quiz for their course.
+# @name createQuiz
+POST {{baseUrl}}/quizzes
+Content-Type: application/json
+Authorization: Bearer {{teacherToken}}
+
+{
+  "title": "JavaScript Fundamentals Check",
+  "courseId": "{{courseId}}",
+  "dueDate": "2025-08-30T23:59:59Z"
+}
+
+### Save the quizId from the response to the environment
+@quizId = {{createQuiz.response.body._id}}
+
+
+### 2. Get All Quizzes for a Course (as Enrolled Student)
+# An enrolled student requests the list of all quizzes for the course they're in.
+# This request requires the student to be enrolled in the course first.
+# Prerequisite: enrollments.http must be run.
+GET {{baseUrl}}/quizzes/course/{{courseId}}
+Authorization: Bearer {{studentToken}}
+
+
+### 3. Get a Single Quiz with its Questions (as Enrolled Student)
+# The student views the details of a specific quiz.
+# Initially, the `questions` array will be empty.
+GET {{baseUrl}}/quizzes/{{quizId}}
+Authorization: Bearer {{studentToken}}
+
+
+### 4. Update a Quiz's Details (as Teacher)
+# The teacher updates the title or due date of the quiz.
+PUT {{baseUrl}}/quizzes/{{quizId}}
+Content-Type: application/json
+Authorization: Bearer {{teacherToken}}
+
+{
+  "title": "JavaScript Fundamentals Check (Final Version)"
+}
+
+
+### 5. Delete a Quiz (as Teacher)
+# The teacher deletes the quiz. This will also delete all associated questions.
+DELETE {{baseUrl}}/quizzes/{{quizId}}
+Authorization: Bearer {{teacherToken}}

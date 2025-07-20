@@ -18,8 +18,8 @@ const userSchema = mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["student", "teacher", "admin"], // Simplified roles for a typical LMS
-        default: "student",
+        enum: ["user", "student", "teacher", "admin"], // Simplified roles for a typical LMS
+        default: "user",
     },
     profilePicture: {
         type: String,
