@@ -1,0 +1,200 @@
+# Project Plan
+## PSLMS (Progression School Learning Management System)
+
+### Tech Stack
+- **Backend**: Node.js, Express.js, MongoDB 
+- **Frontend**: React.js, Next.js, Tailwind CSS
+- **DevOps**:GitHub Actions, Vercel
+- **AI Integration**: OpenAI API,
+- **Testing**: Jest, Mocha, Cypress
+- **Monitoring**: Prometheus, Grafana, ELK Stack (Elasticsearch, Logstash, Kibana)
+- **Documentation**: Swagger, Markdown
+- **Security**: JWT, OAuth2, HTTPS
+- **Version Control**: Git, GitHub
+- **Deployment**: Vercel
+- **Documentation**: API Documentation (Swagger), User Documentation, Developer Documentation, Deployment Documentation
+- **Security**: Authentication, Authorization, Data Encryption, Input Validation, Rate Limiting, CORS Configuration, Security Audits, Vulnerability Scanning, Regular Updates and Patching, Incident Response Plan
+- **Scalability**: Load Balancing, Caching Strategies, Content Delivery Network (CDN), API Rate Limiting
+### Features
+-  User Management
+-  Course Management
+-  Lecture Management
+-  Attandance Management
+-  FileManagement
+-  AI Integration (Most Imp)
+### Backend 
+- Model
+  - UserModel
+  - CourseModel
+  - LectureModel
+  - AttandanceModel
+- Routes
+  - AuthRoutes
+  - UserRoutes
+  - CourseRoute
+  - LectureRoute
+  - AttandanceRoute
+- Controllers
+  - (AuthRoutes)
+    - Register
+    - Login
+    - Logout
+    - ME
+    - Refresh
+  - (UserRoutes)
+    - AddUser
+      - SingleUser
+      - BulkUser
+    - ReadUser
+    - ReadAllUser
+    - UpdateUser
+    - DeleteUser
+  - (CourseRoute)
+    - AddCourse
+      - SingleCourse
+      - BulkCourse
+    - ReadCourse
+    - ReadAllCourse
+    - UpdateCourse
+    - DeleteCourse
+    - UploadCourseMaterial
+    - DownloadCourseMaterial
+  - (LectureRoute)
+    - AddLecture
+      - SingleLecture
+      - BulkLecture
+    - ReadLecture
+    - ReadAllLecture
+    - UpdateLecture
+    - DeleteLecture
+    - UploadLectureMaterial
+    - DownloadLectureMaterial
+  - AI Integration
+    - GenerateCourseContent
+    - GenerateLectureContent
+    - AnalyzeAttendancePatterns
+    - PersonalizedLearningRecommendations
+- Middlewares
+  - AuthMiddleware
+  - ErrorHandlingMiddleware
+  - LoggingMiddleware
+- Database
+  - MongoDB
+    - User Collection
+    - Course Collection
+    - Lecture Collection
+    - Attendance Collection
+    - AI Data Collection
+- Testing
+  - Unit Tests
+  - Integration Tests
+  - End-to-End Tests
+  - Performance Tests
+- Deployment
+  - Docker
+  - CI/CD Pipeline
+  - Cloud Hosting (AWS, Azure, etc.)
+  - Monitoring and Logging
+    - Prometheus
+    - Grafana
+    - ELK Stack (Elasticsearch, Logstash, Kibana)
+### Frontend
+- Framework
+  - React.js
+  - Next.js
+  - Tailwind CSS
+- Components
+  - UI Components
+  - Form Components
+  - Data Display Components
+  - Navigation Components
+- Pages
+- Authentication
+  - Login Page
+  - Register Page
+  - Forgot Password Page
+  - Reset Password Page
+- User Management
+  - AddUser
+    - SingleUser
+    - BulkUser
+  - ReadUser
+  - ReadAllUser
+  - UpdateUser
+  - DeleteUser
+- Course Management
+  - AddCourse
+    - SingleCourse
+    - BulkCourse
+    - UploadCourseMaterial
+    - DownloadCourseMaterial
+  - ReadCourse
+  - ReadAllCourse
+  - UpdateCourse
+  - DeleteCourse
+  - UploadCourseMaterial
+  - DownloadCourseMaterial
+- Lecture Management
+  - AddLecture
+    - SingleLecture
+    - BulkLecture
+    - UploadLectureMaterial
+    - DownloadLectureMaterial
+  - ReadLecture
+  - ReadAllLecture
+  - UpdateLecture
+  - DeleteLecture
+  - UploadLectureMaterial
+  - DownloadLectureMaterial
+- Attendance Management
+  - MarkAttendance
+  - ReadAttendance
+  - ReadAllAttendance
+  - UpdateAttendance
+  - DeleteAttendance
+  - GenerateAttendanceReport
+- File Management
+- AI Integration
+  - GenerateCourseContent
+  - GenerateLectureContent
+  - AnalyzeAttendancePatterns
+  - PersonalizedLearningRecommendations
+  - Chatbot for Student Queries
+### DevOps
+- Version Control
+  - Git
+  - GitHub
+- AI Integration
+  - 
+- Testing
+  - Unit Tests
+  - Integration Tests
+  - End-to-End Tests
+  - Performance Tests
+- Deployment  
+- CI/CD Pipeline
+  - GitHub Actions
+  - Vercel for Frontend Hosting
+  - Docker for Containerization
+- Monitoring and Logging
+- ELK Stack (Elasticsearch, Logstash, Kibana) 
+- Prometheus
+- Grafana 
+- Documentation
+  - API Documentation (Swagger)
+  - User Documentation
+  - Developer Documentation
+  - Deployment Documentation
+### Security
+- Authentication
+- Authorization
+- Data Encryption
+- Input Validation
+- Rate Limiting
+- CORS Configuration
+- Security Audits
+- Vulnerability Scanning
+- Regular Updates and Patching
+- Incident Response Plan
+
+
