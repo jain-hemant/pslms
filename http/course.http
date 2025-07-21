@@ -1,0 +1,83 @@
+@baseUrl = http://localhost:3000/api
+@adminToken =
+@teacherToken = 
+@studentToken =
+@attemptId =    
+@studentToken =
+@teacherId =
+@questionId =
+@questionId2 =  
+@lectureId =
+@courseId = 
+@enrollmentId =
+# -----------------------------------------------------------------
+
+
+
+### Handles all course-related CRUD operations.
+
+```http
+### =================================================================
+### COURSES API ENDPOINTS (/api/courses)
+### =================================================================
+#
+# Prerequisite: Run auth.http to get the necessary tokens.
+#
+
+### 1. Create a new Course (as Teacher)
+# This request is sent by the teacher to create a course.
+# @name createCourse
+POST {{baseUrl}}/courses
+Content-Type: application/json
+Authorization: Bearer {{teacherToken}}
+
+{
+  "title": "Advanced JavaScript Concepts",
+  "description": "A deep dive into closures, prototypes, and async patterns.",
+  "duration": "6 weeks",
+  "price": 99.99,
+  "category": "Web Development",
+  "level": "advanced",
+  "isPublished": true
+}
+
+### Save the courseId from the response to the environment
+@courseId = {{createCourse.response.body._id}}
+
+
+### 2. Get All Published Courses (Public)
+# This endpoint is public and does not require a token.
+GET {{baseUrl}}/courses
+
+
+### 3. Get All Courses (Admin Only)
+# Includes published and unpublished courses. Requires admin privileges.
+GET {{baseUrl}}/courses/all
+Authorization: Bearer {{adminToken}}
+
+
+### 4. Get a Single Course by ID (Public)
+# Anyone can view a published course.
+GET {{baseUrl}}/courses/{{courseId}}
+
+
+### 5. Get All Courses by an Instructor
+# Shows published courses to the public, or all courses if viewing your own.
+GET {{baseUrl}}/courses/instructor/{{teacherId}}
+
+
+### 6. Update a Course (as Teacher who owns it)
+# The teacher updates the price of their course.
+PUT {{baseUrl}}/courses/{{courseId}}
+Content-Type: application/json
+Authorization: Bearer {{teacherToken}}
+
+{
+  "price": 119.99
+}
+
+
+### 7. Delete a Course (as Admin)
+# This performs a soft delete (sets isActive=false). Can also be done by the teacher.
+DELETE {{baseUrl}}/courses/{{courseId}}
+Authorization: Bearer {{adminToken}}

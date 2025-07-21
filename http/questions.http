@@ -1,0 +1,91 @@
+# -----------------------------------------------------------------
+# Variables - The REST client will manage these automatically
+# -----------------------------------------------------------------
+
+@baseUrl = http://localhost:3000/api
+@quizId =
+@teacherToken =
+@studentToken =
+@attemptId =
+@questionId =
+@questionId2 =  
+@lectureId =
+@courseId = 
+@enrollmentId =
+# -----------------------------------------------------------------
+
+
+### =================================================================
+### QUESTIONS API ENDPOINTS (/api/quizzes/:quizId/questions)
+### =================================================================
+#
+# Prerequisite: Run auth.http, courses.http, and quizzes.http first to get the
+# necessary tokens and create a course and a quiz.
+#
+
+### 1. Add a new Multiple Choice Question to a Quiz (as Teacher)
+# @name createQuestion1
+POST {{baseUrl}}/quizzes/{{quizId}}/questions
+Content-Type: application/json
+Authorization: Bearer {{teacherToken}}
+
+{
+  "questionText": "What does CSS stand for?",
+  "questionType": "multiple_choice",
+  "options": [
+    { "text": "Creative Style Sheets", "isCorrect": false },
+    { "text": "Cascading Style Sheets", "isCorrect": true },
+    { "text": "Computer Style Sheets", "isCorrect": false },
+    { "text": "Colorful Style Sheets", "isCorrect": false }
+  ]
+}
+
+### Save the questionId from the response to the environment
+@questionId = {{createQuestion1.response.body._id}}
+
+
+### 2. Add a new True/False Question to the same Quiz
+# @name createQuestion2
+POST {{baseUrl}}/quizzes/{{quizId}}/questions
+Content-Type: application/json
+Authorization: Bearer {{teacherToken}}
+
+{
+  "questionText": "Is `let` a block-scoped variable declaration in JavaScript?",
+  "questionType": "true_false",
+  "options": [
+    { "text": "True", "isCorrect": true },
+    { "text": "False", "isCorrect": false }
+  ]
+}
+
+### Save the second question's ID for the submission test later
+@questionId2 = {{createQuestion2.response.body._id}}
+
+
+### 3. Get All Questions for a Specific Quiz (Teacher's View)
+# This returns the full question objects, including the `isCorrect` flag,
+# which is needed for editing.
+GET {{baseUrl}}/quizzes/{{quizId}}/questions
+Authorization: Bearer {{teacherToken}}
+
+
+### 4. Get a Single Question by ID
+GET {{baseUrl}}/quizzes/{{quizId}}/questions/{{questionId}}
+Authorization: Bearer {{teacherToken}}
+
+
+### 5. Update a Question
+# Change the question text or its options.
+PUT {{baseUrl}}/quizzes/{{quizId}}/questions/{{questionId}}
+Content-Type: application/json
+Authorization: Bearer {{teacherToken}}
+
+{
+    "questionText": "What is the primary purpose of CSS?"
+}
+
+
+### 6. Delete a Question
+DELETE {{baseUrl}}/quizzes/{{quizId}}/questions/{{questionId}}
+Authorization: Bearer {{teacherToken}}

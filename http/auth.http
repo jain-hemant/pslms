@@ -1,0 +1,136 @@
+# -----------------------------------------------------------------
+# Variables - The REST client will manage these automatically
+# -----------------------------------------------------------------
+@baseUrl = http://localhost:3000/api
+@accessToken = {{accessToken}}
+@adminToken = {{accessToken}}
+@adminId = {{adminId}}
+
+###
+# =================================================================
+# 1. AUTHENTICATION FLOW (/api/auth)
+# =================================================================
+
+### 1.1 Register a new Standard User (Student)
+# Creates a new user with the "student" role.
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Jeet",
+  "email": "jeet@gmail.com",
+  "password": "Test@1214",
+  "phoneNumber": "9876543210"
+}
+
+### 1.2 Register a new Admin User
+# Creates a new user with the "admin" role for testing protected routes.
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "honey",
+  "email": "honey@gmail.com",
+  "password": "Test@1214",
+  "phoneNumber": "1234567890"
+}
+
+
+
+### 1. Login as Standard User
+# @name loginUser
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "jeet@gmail.com",
+  "password": "Test@1214"
+}
+
+### Save the accessToken and userId from the response
+@accessToken = {{loginUser.response.body.accessToken}}
+@userId = {{loginUser.response.body.user._id}}
+
+### 1.4 Get the Logged-In User's Profile
+# Uses the captured @accessToken to fetch the user's own profile data.
+# This route is protected by middleware.
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{accessToken}}
+
+
+### 1.5 Logout
+# Clears the server-side session/cookie.
+POST {{baseUrl}}/auth/logout
+
+
+###
+# =================================================================
+# 2. USER MANAGEMENT FLOW (/api/users)
+# =================================================================
+
+### 2.1 Login as Admin to get Admin Token
+# We need an admin token to access the user management routes.
+# @name loginAdmin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "honey@gmail.com",
+  "password": "Test@1214"
+}
+
+### Save the accessToken and userId from the response
+@accessToken = {{loginAdmin.response.body.accessToken}}
+@userId = {{loginAdmin.response.body.user._id}}
+
+### 2.2 Get All Users (Admin Only)
+# This request requires an admin's access token.
+# It will fail with a 403 Forbidden error if a non-admin token is used.
+GET {{baseUrl}}/users
+Authorization: Bearer {{adminToken}}
+
+
+### 2.3 Get a Specific User's Details (as Admin)
+# Admin uses their token to fetch another user's data.
+# Replace {{userId}} with the actual ID of the user you want to fetch (e.g., from the login response).
+GET {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{adminToken}}
+
+
+### 2.4 Get a User's Own Details
+# A regular user can fetch their own profile using their own token.
+GET {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{accessToken}}
+
+
+### 2.5 Update a User's Own Profile
+# A user updates their own information, like their phone number or bio.
+# The password cannot be changed via this endpoint.
+PUT {{baseUrl}}/users/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "phoneNumber": "1112223333",
+  "bio": "I am a passionate learner exploring new technologies.",
+  "address": "123 Learning Lane"
+}
+
+
+### 2.6 Update Another User's Profile (Admin Only)
+# An admin updates another user's role or status.
+PUT {{baseUrl}}/users/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "role": "teacher",
+  "isActive": true
+}
+
+
+### 2.7 Deactivate a User (Admin Only)
+# This performs a "soft delete" by setting the user's `isActive` flag to false.
+# This requires an admin token.
+DELETE {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{adminToken}}

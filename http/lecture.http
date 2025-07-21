@@ -1,0 +1,55 @@
+@baseUrl = http://localhost:3000/api
+@courseId =
+@teacherToken =
+@studentToken =
+@enrollmentId =
+
+### =================================================================
+### LECTURES API ENDPOINTS (/api/courses/:courseId/lectures)
+### =================================================================
+#
+# Prerequisite: Run auth.http and courses.http first.
+#
+
+### 1. Create a Lecture for the Course (as Teacher)
+# @name createLecture
+POST {{baseUrl}}/courses/{{courseId}}/lectures
+Content-Type: application/json
+Authorization: Bearer {{teacherToken}}
+
+{
+  "title": "Module 1: Understanding Async/Await",
+  "content": "Text content explaining how async/await works under the hood.",
+  "contentType": "text",
+  "order": 1,
+  "duration": 30
+}
+
+### Save the lectureId from the response
+@lectureId = {{createLecture.response.body._id}}
+
+
+### 2. Get All Lectures for a Course (as Enrolled Student)
+# The student, having enrolled, can now view the course lectures.
+GET {{baseUrl}}/courses/{{courseId}}/lectures
+Authorization: Bearer {{studentToken}}
+
+
+### 3. Get a Single Lecture's Details
+GET {{baseUrl}}/courses/{{courseId}}/lectures/{{lectureId}}
+Authorization: Bearer {{studentToken}}
+
+
+### 4. Update a Lecture (as Teacher)
+PUT {{baseUrl}}/courses/{{courseId}}/lectures/{{lectureId}}
+Content-Type: application/json
+Authorization: Bearer {{teacherToken}}
+
+{
+  "title": "Module 1 (Updated): Mastering Async/Await and Promises"
+}
+
+
+### 5. Delete a Lecture (as Teacher)
+DELETE {{baseUrl}}/courses/{{courseId}}/lectures/{{lectureId}}
+Authorization: Bearer {{teacherToken}}

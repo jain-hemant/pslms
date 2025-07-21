@@ -1,0 +1,59 @@
+
+@baseUrl = http://localhost:3000/api
+@teacherToken =
+@studentToken =
+@lectureId =
+@courseId =
+@enrollmentId =
+
+
+### =================================================================
+### ENROLLMENTS API ENDPOINTS (/api/enrollments)
+### =================================================================
+#
+# Prerequisite: Run auth.http and courses.http first.
+#
+
+### 1. Enroll in a Course (as Student)
+# @name enrollStudent
+POST {{baseUrl}}/enrollments
+Content-Type: application/json
+Authorization: Bearer {{studentToken}}
+
+{
+  "courseId": "{{courseId}}"
+}
+
+### Save the enrollmentId from the response
+@enrollmentId = {{enrollStudent.response.body._id}}
+
+
+### 2. Get Student's Enrolled Courses
+# The student requests their list of enrolled courses.
+GET {{baseUrl}}/enrollments/my-courses
+Authorization: Bearer {{studentToken}}
+
+
+### 3. Get All Students in a Course (as Teacher)
+# The teacher gets a list of all students enrolled in their course.
+GET {{baseUrl}}/enrollments/course/{{courseId}}/students
+Authorization: Bearer {{teacherToken}}
+
+
+### 4. Update Student Progress (as Student)
+# Student marks a lecture as completed. Requires a lectureId.
+# NOTE: This will only work after you run lectures.http to create a lecture.
+POST {{baseUrl}}/enrollments/progress
+Content-Type: application/json
+Authorization: Bearer {{studentToken}}
+
+{
+  "lectureId": "{{lectureId}}",
+  "courseId": "{{courseId}}"
+}
+
+
+### 5. Unenroll from a Course (as Student)
+# The student removes their own enrollment.
+DELETE {{baseUrl}}/enrollments/{{enrollmentId}}
+Authorization: Bearer {{studentToken}}

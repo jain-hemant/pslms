@@ -1,0 +1,39 @@
+# -----------------------------------------------------------------
+# Variables - The REST client will manage these automatically
+# -----------------------------------------------------------------
+@baseUrl = http://localhost:3000/api
+@accessToken =
+@studentId =
+@courseId =
+@teacherToken =
+@studentToken =
+@lectureId =
+
+###
+### =================================================================
+### ATTENDANCE API ENDPOINTS (/api/attendance)
+### =================================================================
+#
+# Prerequisite: Run auth.http, courses.http, and lectures.http first.
+#
+
+### 1. Mark Attendance for a Lecture (as Student)
+POST {{baseUrl}}/attendance/mark
+Content-Type: application/json
+Authorization: Bearer {{studentToken}}
+
+{
+  "lectureId": "{{lectureId}}"
+}
+
+
+### 2. Get a Student's Attendance Record for a Course (Self View)
+# The student checks their own attendance record for the specified course.
+GET {{baseUrl}}/attendance/student/{{studentId}}/course/{{courseId}}
+Authorization: Bearer {{studentToken}}
+
+
+### 3. Get the Full Attendance Report for a Course (as Teacher)
+# The teacher gets a report of all enrolled students and their attendance status.
+GET {{baseUrl}}/attendance/course/{{courseId}}/report
+Authorization: Bearer {{teacherToken}}
