@@ -27,6 +27,15 @@ export async function POST(request) {
 
         const { accessToken, refreshToken } = generateTokens(user);
 
+        // Set access token in a secure, httpOnly cookie
+        cookies().set('accessToken', accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 24 * 7, // 7 days
+            path: '/',
+        });
+
         // Set refresh token in a secure, httpOnly cookie
         cookies().set('refreshToken', refreshToken, {
             httpOnly: true,

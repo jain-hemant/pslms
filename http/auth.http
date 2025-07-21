@@ -2,9 +2,9 @@
 # Variables - The REST client will manage these automatically
 # -----------------------------------------------------------------
 @baseUrl = http://localhost:3000/api
-@accessToken =
-@adminToken =
-@adminId =
+@accessToken = {{accessToken}}
+@adminToken = {{accessToken}}
+@adminId = {{adminId}}
 
 ###
 # =================================================================
